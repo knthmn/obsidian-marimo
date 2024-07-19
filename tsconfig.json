@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ES6",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "importHelpers": true,
+    "baseUrl": "src",
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "module": "ESNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noEmit": true,
+    "moduleResolution": "node",
+    "lib": ["DOM", "ES5", "ES6", "ES7"]
+  },
+  "include": ["src/**/*.ts"]
+}
