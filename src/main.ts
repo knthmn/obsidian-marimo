@@ -1,11 +1,12 @@
+import MarimoView, { MARIMO_VIEW } from "MarimoView";
 import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
 
-interface MarimoSettings {
-  mySetting: string;
+export interface MarimoSettings {
+  launchPath: string;
 }
 
 const DEFAULT_SETTINGS: MarimoSettings = {
-  mySetting: "default",
+  launchPath: "default",
 };
 
 export default class MarimoPlugin extends Plugin {
@@ -14,6 +15,12 @@ export default class MarimoPlugin extends Plugin {
   override async onload() {
     await this.loadSettings();
     this.addSettingTab(new MarimoSettingTab(this.app, this));
+
+    this.registerView(
+      MARIMO_VIEW,
+      (leaf) => new MarimoView(leaf, this.settings),
+    );
+    this.registerExtensions(["py"], MARIMO_VIEW);
   }
 
   override onunload() {}
@@ -44,14 +51,16 @@ class MarimoSettingTab extends PluginSettingTab {
     containerEl.empty();
 
     new Setting(containerEl)
-      .setName("Setting #1")
-      .setDesc("It's a secret")
-      .addText((text) =>
+      .setName("Path to launch Marimo")
+      .setDesc(
+        "Path to the Marimo executable, absolute or relative to the vault root.",
+      )
+      .addTextArea((text) =>
         text
-          .setPlaceholder("Enter your secret")
-          .setValue(this.plugin.settings.mySetting)
+          .setPlaceholder("./.venv/bin/marimo")
+          .setValue(this.plugin.settings.launchPath)
           .onChange(async (value) => {
-            this.plugin.settings.mySetting = value;
+            this.plugin.settings.launchPath = value;
             await this.plugin.saveSettings();
           }),
       );
