@@ -41,16 +41,15 @@ export default class MarimoView extends FileView {
       },
     );
     this.process.stdout?.on("data", (data: Buffer) => {
-      const regex = /URL: http:\/\/localhost:(\d+)/;
+      const regex = /➜ {2}URL: (https?:\/\/[^\s]+:\d+)/;
       const match = data.toString().match(regex);
-      if (!match) return;
-      const port = match[1];
-      if (!port) return;
+      const url = match?.[1];
+      if (!url) return;
       const containerEl = this.containerEl;
       containerEl.empty();
       containerEl.createEl("iframe", {
         attr: {
-          src: `http://localhost:${port}`,
+          src: url,
           style: "height: 100%; width: 100%;",
         },
       });
