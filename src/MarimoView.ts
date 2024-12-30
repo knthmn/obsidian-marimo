@@ -38,6 +38,12 @@ export default class MarimoView extends FileView {
         shell: true,
         detached: true,
         cwd: path.resolve(fileExecutablePath, ".."),
+        env: {
+          ...process.env,
+          ...(this.settings.disablePycache
+            ? { PYTHONDONTWRITEBYTECODE: "1" }
+            : {}),
+        },
       },
     );
     this.process.stdout?.on("data", (data: Buffer) => {

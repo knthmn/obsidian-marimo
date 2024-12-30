@@ -3,10 +3,12 @@ import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
 
 export interface MarimoSettings {
   launchPath: string;
+  disablePycache: boolean;
 }
 
 const DEFAULT_SETTINGS: MarimoSettings = {
   launchPath: "default",
+  disablePycache: true,
 };
 
 export default class MarimoPlugin extends Plugin {
@@ -61,6 +63,19 @@ class MarimoSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.launchPath)
           .onChange(async (value) => {
             this.plugin.settings.launchPath = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+    new Setting(containerEl)
+      .setName("Disable pycache")
+      .setDesc(
+        "Set PYTHONDONTWRITEBYTECODE environment variable to 1 to disable the generation of __pycache__ directory.",
+      )
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.disablePycache)
+          .onChange(async (value) => {
+            this.plugin.settings.disablePycache = value;
             await this.plugin.saveSettings();
           }),
       );
