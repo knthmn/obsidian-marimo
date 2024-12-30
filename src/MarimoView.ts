@@ -17,6 +17,7 @@ export default class MarimoView extends FileView {
 
   private timeout: NodeJS.Timeout | null = null;
   private initialized: boolean = false;
+  private exited: boolean = false;
 
   constructor(
     leaf: WorkspaceLeaf,
@@ -80,6 +81,8 @@ export default class MarimoView extends FileView {
       console.error(`stderr from Marimo process: ${data.toString()}`);
     });
     this.process.on("close", (code) => {
+      this.exited = true;
+      if (code === 0) return;
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       const message = `Marimo process exited with code ${code}`;
       new Notice(message);
@@ -95,8 +98,16 @@ export default class MarimoView extends FileView {
       clearTimeout(this.timeout);
     }
     if (this.process) {
-      this.process.kill("SIGTERM");
-      this.process = null;
+      const process = this.process;
+      process.kill("SIGINT");
+      process.stdin?.write("y\n");
+      this.timeout = setTimeout(() => {
+        if (this.exited) return;
+        new Notice(
+          "Marimo process did not stop. Killing it. There might be leftover processes.",
+        );
+        process.kill("SIGKILL");
+      }, 1000);
     }
   }
 
