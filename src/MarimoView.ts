@@ -3,6 +3,7 @@ import type { MarimoSettings } from "main";
 import {
   FileSystemAdapter,
   FileView,
+  Notice,
   type TFile,
   type WorkspaceLeaf,
 } from "obsidian";
@@ -13,6 +14,9 @@ export const MARIMO_VIEW = "marimo";
 
 export default class MarimoView extends FileView {
   private process: ChildProcess | null = null;
+
+  private timeout: NodeJS.Timeout | null = null;
+  private initialized: boolean = false;
 
   constructor(
     leaf: WorkspaceLeaf,
@@ -26,6 +30,7 @@ export default class MarimoView extends FileView {
     const filePath = file.path;
     const adapter = this.app.vault.adapter;
     if (!(adapter instanceof FileSystemAdapter)) {
+      new Notice("Failed to get FileSystemAdapter");
       return;
     }
     const vaulRootDir = adapter.getBasePath();
@@ -46,7 +51,14 @@ export default class MarimoView extends FileView {
         },
       },
     );
+    this.timeout = setTimeout(() => {
+      if (this.initialized) return;
+      new Notice(
+        "Marimo is taking longer than expected to launch. Please check the console for details.",
+      );
+    }, 5000);
     this.process.stdout?.on("data", (data: Buffer) => {
+      console.debug(`stdout from Marimo process: ${data.toString()}`);
       const regex = /➜ {2}URL: (https?:\/\/[^\s]+:\d+)/;
       const match = data.toString().match(regex);
       const url = match?.[1];
@@ -59,13 +71,19 @@ export default class MarimoView extends FileView {
           style: "height: 100%; width: 100%;",
         },
       });
+      this.initialized = true;
     });
     this.process.stderr?.on("data", (data: Buffer) => {
-      console.error(`stderr: ${data.toString()}`);
+      new Notice(
+        `An error occurred when launching Marimo, see the console for details.`,
+      );
+      console.error(`stderr from Marimo process: ${data.toString()}`);
     });
     this.process.on("close", (code) => {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      console.log(`child process exited with code ${code ?? "null"}`);
+      const message = `Marimo process exited with code ${code}`;
+      new Notice(message);
+      console.error(message);
     });
   }
 
@@ -73,6 +91,9 @@ export default class MarimoView extends FileView {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   protected override async onClose() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
     if (this.process) {
       this.process.kill("SIGTERM");
       this.process = null;
