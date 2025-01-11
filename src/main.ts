@@ -1,5 +1,14 @@
 import MarimoView, { MARIMO_VIEW } from "MarimoView";
-import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
+import {
+  App,
+  FileSystemAdapter,
+  Notice,
+  Plugin,
+  PluginSettingTab,
+  Setting,
+} from "obsidian";
+import path from "path";
+import { spawn } from "child_process";
 
 export interface MarimoSettings {
   launchPath: string;
@@ -65,6 +74,11 @@ class MarimoSettingTab extends PluginSettingTab {
             this.plugin.settings.launchPath = value;
             await this.plugin.saveSettings();
           }),
+      )
+      .addButton((button) =>
+        button.setButtonText("Test").onClick(() => {
+          void testVersion(this.app, this.plugin.settings.launchPath);
+        }),
       );
     new Setting(containerEl)
       .setName("Disable pycache")
@@ -79,5 +93,44 @@ class MarimoSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           }),
       );
+  }
+}
+
+async function testVersion(app: App, launchPath: string) {
+  const adapter = app.vault.adapter;
+  if (!(adapter instanceof FileSystemAdapter)) {
+    new Notice("Failed to get FileSystemAdapter");
+    return;
+  }
+  const executablePath = path.resolve(adapter.getBasePath(), launchPath);
+  try {
+    const runningProcess = spawn(executablePath, ["--version"], {
+      env: {
+        ...process.env,
+      },
+    });
+    const output = await new Promise<string>((resolve, reject) => {
+      let message = "";
+
+      runningProcess.stdout.on("data", (data: Buffer) => {
+        message += data.toString();
+      });
+      runningProcess.stderr.on("data", (data: Buffer) => {
+        message += data.toString();
+      });
+      runningProcess.on("error", (error) => {
+        reject(error);
+      });
+      runningProcess.on("close", (code) => {
+        if (code === 0) {
+          resolve(message);
+        } else {
+          reject(Error(message));
+        }
+      });
+    });
+    new Notice(`Successfully detected Marimo with version: ${output}`);
+  } catch (error) {
+    new Notice(`Failed to detect Marimo. Message: ${(error as Error).message}`);
   }
 }
