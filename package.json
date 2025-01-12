@@ -17,6 +17,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.11.6",
+    "@types/shell-quote": "^1.7.5",
     "@typescript-eslint/eslint-plugin": "5.29.0",
     "@typescript-eslint/parser": "5.29.0",
     "builtin-modules": "3.3.0",
@@ -43,5 +44,8 @@
       "bun version-bump",
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "shell-quote": "^1.8.2"
   }
 }

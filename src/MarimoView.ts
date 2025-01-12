@@ -1,5 +1,6 @@
 import { type ChildProcess, spawn } from "child_process";
 import type { MarimoSettings } from "main";
+import { quote } from "shell-quote";
 import {
   FileSystemAdapter,
   FileView,
@@ -39,7 +40,7 @@ export default class MarimoView extends FileView {
     const executablePath = path.resolve(vaulRootDir, this.settings.launchPath);
     this.process = spawn(
       executablePath,
-      ["edit", fileExecutablePath, "--headless", "--no-token"],
+      ["edit", quote([fileExecutablePath]), "--headless", "--no-token"],
       {
         shell: true,
         detached: true,
