@@ -30,6 +30,17 @@ export default class MarimoView extends FileView {
   // eslint-disable-next-line @typescript-eslint/require-await
   override async onLoadFile(file: TFile) {
     const filePath = file.path;
+    this.registerEvent(
+      this.app.workspace.on("quit", () => {
+        void this.onClose();
+      }),
+    );
+    this.registerEvent(
+      this.app.workspace.on("window-close", () => {
+        void this.onClose();
+      }),
+    );
+
     const adapter = this.app.vault.adapter;
     if (!(adapter instanceof FileSystemAdapter)) {
       new Notice("Failed to get FileSystemAdapter");
