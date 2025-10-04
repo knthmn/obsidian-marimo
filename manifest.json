@@ -1,11 +1,10 @@
 {
-  "id": "marimo-plugin",
-  "name": "Obsidian Marimo",
+  "id": "marimo-notebook",
+  "name": "Marimo Notebook Plugin",
   "version": "0.0.1",
   "minAppVersion": "0.15.0",
-  "description": "Demonstrates some of the capabilities of the Obsidian API.",
+  "description": "Run Marimo Notebook in Obsidian.",
   "author": "knthmn",
-  "authorUrl": "https://obsidian.md",
-  "fundingUrl": "https://obsidian.md/pricing",
+  "authorUrl": "https://github.com/knthmn",
   "isDesktopOnly": true
 }
