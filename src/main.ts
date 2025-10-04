@@ -23,6 +23,7 @@ const DEFAULT_SETTINGS: MarimoSettings = {
 export default class MarimoPlugin extends Plugin {
   settings!: MarimoSettings;
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   override async onload() {
     await this.loadSettings();
     this.addSettingTab(new MarimoSettingTab(this.app, this));
