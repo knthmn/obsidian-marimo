@@ -1,9 +1,9 @@
 {
   "id": "marimo-notebook",
-  "name": "Marimo Notebook Plugin",
+  "name": "Marimo Notebook",
   "version": "0.0.1",
   "minAppVersion": "0.15.0",
-  "description": "Run Marimo Notebook in Obsidian.",
+  "description": "Run Marimo Notebook without leaving your vault.",
   "author": "knthmn",
   "authorUrl": "https://github.com/knthmn",
   "isDesktopOnly": true
