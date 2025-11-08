@@ -27,7 +27,6 @@ export default class MarimoView extends FileView {
     super(leaf);
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   override async onLoadFile(file: TFile) {
     const filePath = file.path;
     this.registerEvent(
@@ -43,7 +42,7 @@ export default class MarimoView extends FileView {
 
     const adapter = this.app.vault.adapter;
     if (!(adapter instanceof FileSystemAdapter)) {
-      new Notice("Failed to get FileSystemAdapter");
+      new Notice("Failed to get the file system adapter");
       return;
     }
     const vaulRootDir = adapter.getBasePath();
@@ -95,8 +94,7 @@ export default class MarimoView extends FileView {
     this.process.on("close", (code) => {
       this.exited = true;
       if (code === 0) return;
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      const message = `Marimo process exited with code ${code}`;
+      const message = `Marimo process exited with code ${code?.toString() ?? "undefined"}`;
       new Notice(message);
       console.error(message);
     });
@@ -104,7 +102,6 @@ export default class MarimoView extends FileView {
 
   protected override async onOpen() {}
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   protected override async onClose() {
     if (this.timeout) {
       clearTimeout(this.timeout);

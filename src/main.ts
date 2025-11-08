@@ -100,7 +100,7 @@ class MarimoSettingTab extends PluginSettingTab {
 async function testVersion(app: App, launchPath: string) {
   const adapter = app.vault.adapter;
   if (!(adapter instanceof FileSystemAdapter)) {
-    new Notice("Failed to get FileSystemAdapter");
+    new Notice("Failed to get file system adapter");
     return;
   }
   const executablePath = path.resolve(adapter.getBasePath(), launchPath);

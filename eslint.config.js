@@ -1,10 +1,8 @@
-import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
-import tseslint from "typescript-eslint";
+import obsidianmd from "eslint-plugin-obsidianmd";
 
 export default defineConfig([
-  eslint.configs.recommended,
-  tseslint.configs.strictTypeChecked,
+  ...obsidianmd.configs.recommended,
   {
     languageOptions: {
       parserOptions: {
@@ -15,5 +13,18 @@ export default defineConfig([
   },
   {
     ignores: ["**/*.js", "**/*.mjs"],
+  },
+  {
+    rules: {
+      // handled by TypeScript compiler
+      "no-undef": "off",
+      "obsidianmd/ui/sentence-case": [
+        "error",
+        {
+          brands: ["Marimo"],
+          ignoreWords: ["PYTHONDONTWRITEBYTECODE"],
+        },
+      ],
+    },
   },
 ]);
