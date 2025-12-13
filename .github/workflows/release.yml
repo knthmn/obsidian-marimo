@@ -20,17 +20,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install -g bun
-          bun install
+          npm install -g pnpm
+          pnpm install
 
       - name: Lint code
         run: |
-          bun run typecheck
-          bun run lint
+          pnpm run typecheck
+          pnpm run lint
 
       - name: Build plugin
         run: |
-          bun run build
+          pnpm run build
 
       - name: Create release
         env:

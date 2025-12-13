@@ -12,25 +12,25 @@ This plugin allows you to launch a Marimo notebook without leaving your vault.
 
 Prerequisites
 
-- [Bun](https://bun.sh) (^1.2.22)
+- [pnpm](https://pnpm.io/) (^10.25.0)
 
 Instructions
 
 1. Install dependencies
 
    ```fish
-   bun install
+   pnpm install
    ```
 
 2. Run in watch mode:
 
    ```fish
-   bun run dev
+   pnpm run dev
    ```
 
 3. Build for release:
    ```fish
-   bun run build
+   pnpm run build
    ```
 
 ## Contributing
