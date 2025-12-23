@@ -1,7 +1,6 @@
 {
   "id": "marimo-notebook",
   "name": "Marimo Notebook",
-  "version": "0.0.2",
   "minAppVersion": "0.15.0",
   "description": "Run Marimo Notebook without leaving your vault.",
   "author": "knthmn",

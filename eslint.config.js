@@ -12,9 +12,7 @@ export default defineConfig([
     },
   },
   {
-    ignores: ["**/*.js", "**/*.mjs"],
-  },
-  {
+    files: ["**/*.ts", "**/*.tsx"],
     rules: {
       // handled by TypeScript compiler
       "no-undef": "off",
@@ -26,5 +24,8 @@ export default defineConfig([
         },
       ],
     },
+  },
+  {
+    ignores: ["**/*.js", "**/*.mjs"],
   },
 ]);

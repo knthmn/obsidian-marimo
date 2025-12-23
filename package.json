@@ -5,9 +5,9 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "dev": "bun esbuild.config.mjs",
-    "build": "bun esbuild.config.mjs production",
-    "version-bump": "bun version-bump.mjs",
+    "dev": "pnpm esbuild.config.mjs",
+    "build": "pnpm esbuild.config.mjs production",
+    "version-bump": "pnpm version-bump.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "postinstall": "simple-git-hooks"
@@ -18,31 +18,31 @@
   "devDependencies": {
     "@types/node": "^16.11.6",
     "@types/shell-quote": "^1.7.5",
-    "builtin-modules": "3.3.0",
     "esbuild": "0.17.3",
     "eslint": "^9.37.0",
-    "eslint-plugin-obsidianmd": "^0.1.8",
-    "lint-staged": "^15.2.7",
+    "eslint-plugin-obsidianmd": "^0.1.9",
+    "nano-staged": "^0.9.0",
     "obsidian": "latest",
     "prettier": "^3.3.3",
     "simple-git-hooks": "^2.11.1",
     "tslib": "2.4.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun lint-staged"
+    "pre-commit": "pnpm nano-staged"
   },
-  "lint-staged": {
+  "nano-staged": {
     "*": "prettier --write --ignore-unknown",
     "*.ts": [
       "eslint --fix",
       "prettier --write"
     ],
     "{package.json,manifest.json}": [
-      "bun version-bump",
+      "node version-bump.mjs",
       "prettier --write"
     ]
   },
   "dependencies": {
+    "obsidian-marimo": "link:",
     "shell-quote": "^1.8.2"
   }
 }
